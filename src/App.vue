@@ -1,7 +1,7 @@
 <template>
-  <div ref="element" :class="print ? 'w-[8.27in] h-[11.69in]' : 'w-screen min-h-screen'">
-    <div class="w-full min-h-screen flex justify-center items-center font-noto" :class="{ 'p-20': print }">
-      <div class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)] overflow-auto max-h-screen">
+  <div ref="element" :class="print ? 'w-[8.27in] h-[11.69in] bg-green-200' : 'w-screen min-h-screen'">
+    <div class="w-full flex justify-center items-center font-noto" :class="{ 'p-20': print }">
+      <div class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)]">
         <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="submit">
           <span class="self-center text-xl font-bold uppercase py-2">Datos Del Cliente</span>
           <InputText text="Persona de contacto:" placeholder="Nombre completo" name="contacto" v-model="properties.contacto" />

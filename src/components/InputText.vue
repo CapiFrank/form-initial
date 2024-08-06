@@ -1,0 +1,30 @@
+<template>
+    <div class="flex flex-col gap-1">
+        <label :for="name" class="text-sm text-black font-semibold">{{ props.text }}</label>
+        <input type="text" class="rounded-md shadow-sm p-1.5 border-gray-300 outline-slate-500"
+            :placeholder="props.placeholder" :name="name" :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)">
+    </div>
+</template>
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+const props = defineProps({
+    modelValue: {
+        type: String,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    text: {
+        type: String,
+        required: true,
+    }
+    ,
+    placeholder: {
+        type: String,
+    }
+});
+
+defineEmits(['update:modelValue']);
+</script>

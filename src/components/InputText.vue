@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-col gap-1">
-        <label :for="name" class="text-sm text-black font-semibold">{{ props.text }}</label>
+        <label :for="name" class="text-sm text-black font-semibold">{{ props.text }}<span class="text-red-500" v-show="props.required"> *</span></label>
         <input type="text" class="rounded-md shadow-sm p-1.5 border-gray-300 outline-slate-500"
             :placeholder="props.placeholder" :name="name" :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)">
+            @input="$emit('update:modelValue', $event.target.value)" :required="props.required">
     </div>
 </template>
 <script setup>
@@ -23,6 +23,10 @@ const props = defineProps({
     ,
     placeholder: {
         type: String,
+    }
+    ,
+    required:{
+        type: Boolean,
     }
 });
 

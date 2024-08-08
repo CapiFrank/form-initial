@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col gap-1">
-        <span class="text-sm text-black font-semibold">{{ text }}</span>
+        <span class="text-sm text-black font-semibold">{{ text }}<span class="text-red-500" v-show="props.required"> *</span></span>
         <div class="flex flex-wrap gap-4">
             <!-- Primera columna -->
             <div class="flex flex-col">
@@ -11,7 +11,8 @@
                         :name="option"
                         :value="option" 
                         :checked="modelValue.includes(option)" 
-                        @change="toggleSelection(option)" 
+                        @change="toggleSelection(option)"
+                        :required="!modelValue.length && props.required"
                     />
                     <label :for="option">{{ option }}</label>
                 </div>
@@ -27,6 +28,7 @@
                         :value="option" 
                         :checked="modelValue.includes(option)" 
                         @change="toggleSelection(option)" 
+                        :required="!modelValue.length && props.required"
                     />
                     <label :for="option">{{ option }}</label>
                 </div>
@@ -55,6 +57,9 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    required:{
+        type: Boolean
+    }
 });
 
 const emit = defineEmits(['update:modelValue']);

@@ -8,14 +8,14 @@
           <InputText required text="Nombre del comercio" placeholder="Nombre de fantasía" name="fantasia" v-model="properties.fantasia" />
           <InputText required text="Razón social" placeholder="Nombre físico o jurídico" name="razonsocial" v-model="properties.razonsocial" />
           <InputNumber required text="Número de cédula física o jurídica" placeholder="101230321" name="cedula" v-model="properties.cedula" />
-          <RadioButton required text="Régimen del negocio" :options="['Simplificado', 'Tradicional']" name="regimen" v-model="properties.regimen" />
+          <RadioButton required text="Régimen del negocio" placeholder="Restaurante" :options="['Simplificado', 'Tradicional']" name="regimen" v-model="properties.regimen" />
           <InputDatalist required text="Tipo de negocio" :options="['Soda', 'Restaurante', 'Cafeteria', 'Supermercado', 'Salon de belleza', 'Tienda de ropa']" name="tiponegocio" v-model="properties.tiponegocio"></InputDatalist>
           <RadioButton required text="Posee internet en el local?" :options="['Si', 'No']" name="internet" v-model="properties.internet" />
           <InputCheckbox required text="Métodos de pago a usar" :options="['Efectivo', 'Dolares', 'Tarjeta', 'Sinpe Movil', 'Credito', 'Pinpad']" name="metodopago" v-model="properties.metodopago"></InputCheckbox>
           <InputCheckbox required text="Para qué desea el sistema?" :options="['Vender', 'Llevar inventarios']" name="sistema" v-model="properties.sistema"></InputCheckbox>
           <InputCheckbox required v-if="properties.sistema.includes('Llevar inventarios')" text="Cómo desea llevar el inventario?:" :options="['Por unidades', 'Por gramaje(Recetas)']" name="inventario" v-model="properties.inventario"></InputCheckbox>
           <InputCheckbox required text="Cuáles de los siguientes aspectos son más importantes para usted?" name="expectativas" :options="['Mejorar el tiempo de cobro', 'Optimizar el control de estadísticas y ventas', 'Fortalecer el control de empleados', 'Mejorar la integración con la tecnología']" v-model="properties.expectativas"></InputCheckbox>
-          <button type="submit" class="bg-green-400 p-2 m-2 w-28 rounded-md self-center">Descargar</button>
+          <button type="submit" class="bg-green-400 font-bold text-white border-green-500 hover:bg-green-500 focus:bg-green-600 border-2 p-2 m-2 w-28 rounded-md self-center">Descargar</button>
         </form>
       </div>
     </div>

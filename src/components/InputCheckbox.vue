@@ -14,7 +14,7 @@
                         @change="toggleSelection(option)"
                         :required="!modelValue.length && props.required"
                     />
-                    <label :for="option">{{ option }}</label>
+                    <label class="text-nowrap" :for="option">{{ option }}</label>
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         @change="toggleSelection(option)" 
                         :required="!modelValue.length && props.required"
                     />
-                    <label :for="option">{{ option }}</label>
+                    <label class="text-nowrap" :for="option">{{ option }}</label>
                 </div>
             </div>
         </div>

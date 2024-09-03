@@ -3,7 +3,7 @@
     <div class="w-full flex justify-center items-center font-noto" :class="{ 'p-20': print }">
       <div
         class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)]">
-        <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="submit">
+        <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="sharePDF">
           <span class="self-center text-xl font-bold uppercase py-2">Datos Del Cliente</span>
           <InputText required text="Persona de contacto" placeholder="Nombre completo" name="contacto"
             v-model="properties.contacto" />
@@ -34,9 +34,7 @@
             v-model="properties.expectativas"></InputCheckbox>
           <div class="flex self-center">
             <button type="submit"
-              class="bg-green-400 font-bold text-white border-green-500 hover:bg-green-500 focus:bg-green-600 border-2 p-2 m-2 w-28 rounded-md self-center">Descargar</button>
-            <button @click="sharePDF"
-              class="bg-blue-400 font-bold text-white border-blue-500 hover:bg-blue-500 focus:bg-blue-600 border-2 p-2 m-2 w-28 rounded-md self-center">Compartir</button>
+              class="bg-green-400 font-bold text-white border-green-500 hover:bg-green-500 focus:bg-green-600 border-2 p-2 m-2 w-28 rounded-md self-center">Compartir</button>
           </div>
         </form>
       </div>
@@ -101,10 +99,10 @@ const convertToPDF = () => {
       pdf.addImage(canvas, 'PNG', 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height, '', 'FAST');
 
       // Guarda o muestra el PDF
-      pdf.save(exportFilename.value);
+      // pdf.save(exportFilename.value);
 
-      // Resuelve la promesa después de completar la operación
-      resolve();
+      // // Resuelve la promesa después de completar la operación
+      resolve(pdf);
     } catch (error) {
       // Rechaza la promesa en caso de error
       reject(error);
@@ -113,26 +111,23 @@ const convertToPDF = () => {
 };
 const sharePDF = async () => {
   try {
-    // Genera el PDF
-    await submit();
-    
+    // Genera el PDF usando convertToPDF
+    const pdf = await convertToPDF();
+
     // Solo continúa si la API Web Share está disponible
     if (navigator.share) {
       // Convierte el PDF en un archivo Blob
-      const pdfBlob = new Blob([await pdf.output('arraybuffer')], { type: 'application/pdf' });
+      const pdfBlob = new Blob([pdf.output('arraybuffer')], { type: 'application/pdf' });
 
-      // Crea un objeto URL para el archivo Blob
-      const pdfURL = URL.createObjectURL(pdfBlob);
+      // Crea un objeto File para compartir
+      const file = new File([pdfBlob], exportFilename.value, { type: 'application/pdf' });
 
-      // Comparte el PDF
+      // Comparte el archivo PDF
       await navigator.share({
         title: 'Datos del Cliente',
         text: 'Por favor, revise el documento adjunto.',
-        files: [new File([pdfBlob], exportFilename.value, { type: 'application/pdf' })]
+        files: [file]
       });
-
-      // Libera el objeto URL para evitar fugas de memoria
-      URL.revokeObjectURL(pdfURL);
     } else {
       alert("La función de compartir no es compatible con este dispositivo.");
     }

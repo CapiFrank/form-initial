@@ -1,21 +1,43 @@
 <template>
   <div ref="element" :class="print ? 'w-[8.27in] h-[11.69in] bg-green-200' : 'w-screen min-h-screen'">
     <div class="w-full flex justify-center items-center font-noto" :class="{ 'p-20': print }">
-      <div class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)]">
+      <div
+        class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)]">
         <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="submit">
           <span class="self-center text-xl font-bold uppercase py-2">Datos Del Cliente</span>
-          <InputText required text="Persona de contacto" placeholder="Nombre completo" name="contacto" v-model="properties.contacto" />
-          <InputText required text="Nombre del comercio" placeholder="Nombre de fantasía" name="fantasia" v-model="properties.fantasia" />
-          <InputText required text="Razón social" placeholder="Nombre físico o jurídico" name="razonsocial" v-model="properties.razonsocial" />
-          <InputNumber required text="Número de cédula física o jurídica" placeholder="101230321" name="cedula" v-model="properties.cedula" />
-          <RadioButton required text="Régimen del negocio" placeholder="Restaurante" :options="['Simplificado', 'Tradicional']" name="regimen" v-model="properties.regimen" />
-          <InputDatalist required text="Tipo de negocio" :options="['Soda', 'Restaurante', 'Cafeteria', 'Supermercado', 'Salon de belleza', 'Tienda de ropa']" name="tiponegocio" v-model="properties.tiponegocio"></InputDatalist>
-          <RadioButton required text="Posee internet en el local?" :options="['Si', 'No']" name="internet" v-model="properties.internet" />
-          <InputCheckbox required text="Métodos de pago a usar" :options="['Efectivo', 'Dolares', 'Tarjeta', 'Sinpe Movil', 'Credito', 'Pinpad']" name="metodopago" v-model="properties.metodopago"></InputCheckbox>
-          <InputCheckbox required text="Para qué desea el sistema?" :options="['Vender', 'Llevar inventarios']" name="sistema" v-model="properties.sistema"></InputCheckbox>
-          <InputCheckbox required v-if="properties.sistema.includes('Llevar inventarios')" text="Cómo desea llevar el inventario?:" :options="['Por unidades', 'Por gramaje(Recetas)']" name="inventario" v-model="properties.inventario"></InputCheckbox>
-          <InputCheckbox required text="Cuáles de los siguientes aspectos son más importantes para usted?" name="expectativas" :options="['Mejorar el tiempo de cobro', 'Optimizar el control de estadísticas y ventas', 'Fortalecer el control de empleados', 'Mejorar la integración con la tecnología']" v-model="properties.expectativas"></InputCheckbox>
-          <button type="submit" class="bg-green-400 font-bold text-white border-green-500 hover:bg-green-500 focus:bg-green-600 border-2 p-2 m-2 w-28 rounded-md self-center">Descargar</button>
+          <InputText required text="Persona de contacto" placeholder="Nombre completo" name="contacto"
+            v-model="properties.contacto" />
+          <InputText required text="Nombre del comercio" placeholder="Nombre de fantasía" name="fantasia"
+            v-model="properties.fantasia" />
+          <InputText required text="Razón social" placeholder="Nombre físico o jurídico" name="razonsocial"
+            v-model="properties.razonsocial" />
+          <InputNumber required text="Número de cédula física o jurídica" placeholder="101230321" name="cedula"
+            v-model="properties.cedula" />
+          <RadioButton required text="Régimen del negocio" placeholder="Restaurante"
+            :options="['Simplificado', 'Tradicional']" name="regimen" v-model="properties.regimen" />
+          <InputDatalist required text="Tipo de negocio"
+            :options="['Soda', 'Restaurante', 'Cafeteria', 'Supermercado', 'Salon de belleza', 'Tienda de ropa']"
+            name="tiponegocio" v-model="properties.tiponegocio"></InputDatalist>
+          <RadioButton required text="Posee internet en el local?" :options="['Si', 'No']" name="internet"
+            v-model="properties.internet" />
+          <InputCheckbox required text="Métodos de pago a usar"
+            :options="['Efectivo', 'Dolares', 'Tarjeta', 'Sinpe Movil', 'Credito', 'Pinpad']" name="metodopago"
+            v-model="properties.metodopago"></InputCheckbox>
+          <InputCheckbox required text="Para qué desea el sistema?" :options="['Vender', 'Llevar inventarios']"
+            name="sistema" v-model="properties.sistema"></InputCheckbox>
+          <InputCheckbox required v-if="properties.sistema.includes('Llevar inventarios')"
+            text="Cómo desea llevar el inventario?:" :options="['Por unidades', 'Por gramaje(Recetas)']"
+            name="inventario" v-model="properties.inventario"></InputCheckbox>
+          <InputCheckbox required text="Cuáles de los siguientes aspectos son más importantes para usted?"
+            name="expectativas"
+            :options="['Mejorar el tiempo de cobro', 'Optimizar el control de estadísticas y ventas', 'Fortalecer el control de empleados', 'Mejorar la integración con la tecnología']"
+            v-model="properties.expectativas"></InputCheckbox>
+          <div class="flex self-center">
+            <button type="submit"
+              class="bg-green-400 font-bold text-white border-green-500 hover:bg-green-500 focus:bg-green-600 border-2 p-2 m-2 w-28 rounded-md self-center">Descargar</button>
+            <button @click="sharePDF"
+              class="bg-blue-400 font-bold text-white border-blue-500 hover:bg-blue-500 focus:bg-blue-600 border-2 p-2 m-2 w-28 rounded-md self-center">Compartir</button>
+          </div>
         </form>
       </div>
     </div>
@@ -89,4 +111,34 @@ const convertToPDF = () => {
     }
   });
 };
+const sharePDF = async () => {
+  try {
+    // Genera el PDF
+    await submit();
+    
+    // Solo continúa si la API Web Share está disponible
+    if (navigator.share) {
+      // Convierte el PDF en un archivo Blob
+      const pdfBlob = new Blob([await pdf.output('arraybuffer')], { type: 'application/pdf' });
+
+      // Crea un objeto URL para el archivo Blob
+      const pdfURL = URL.createObjectURL(pdfBlob);
+
+      // Comparte el PDF
+      await navigator.share({
+        title: 'Datos del Cliente',
+        text: 'Por favor, revise el documento adjunto.',
+        files: [new File([pdfBlob], exportFilename.value, { type: 'application/pdf' })]
+      });
+
+      // Libera el objeto URL para evitar fugas de memoria
+      URL.revokeObjectURL(pdfURL);
+    } else {
+      alert("La función de compartir no es compatible con este dispositivo.");
+    }
+  } catch (error) {
+    console.error("Error al compartir el PDF:", error);
+  }
+};
+
 </script>

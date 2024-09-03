@@ -3,7 +3,7 @@
     <div class="w-full flex justify-center items-center font-noto" :class="{ 'p-20': print }">
       <div
         class="bg-[rgba(255,255,255,0.5)] rounded-md shadow-[0_4px_30px_rgba(0,0,0,0.1)] border-[1px_solid_rgba(255,255,255,0.3)]">
-        <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="sharePDF">
+        <form class="flex flex-col gap-2 py-2 px-8" @submit.prevent="submit">
           <span class="self-center text-xl font-bold uppercase py-2">Datos Del Cliente</span>
           <InputText required text="Persona de contacto" placeholder="Nombre completo" name="contacto"
             v-model="properties.contacto" />
@@ -70,7 +70,7 @@ const exportFilename = ref(`datos_adicionales.pdf`);
 const submit = async () => {
   print.value = !print.value;
   await nextTick();
-  await convertToPDF();
+  await sharePDF();
   print.value = !print.value;
 }
 const convertToPDF = () => {

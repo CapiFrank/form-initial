@@ -126,9 +126,11 @@ const sharePDF = async () => {
 
     // Solo continúa si la API Web Share está disponible
     // Verifica si el navegador soporta la API de Web Share con archivos
-    if (navigator.canShare && navigator.canShare({ files: [] })) {
-      const pdfBlob = new Blob([pdf.output('arraybuffer')], { type: 'application/pdf' });
-      const file = new File([pdfBlob], exportFilename.value, { type: 'application/pdf' });
+
+    const pdfBlob = new Blob([pdf.output('arraybuffer')], { type: 'application/pdf' });
+    const file = new File([pdfBlob], exportFilename.value, { type: 'application/pdf' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+
 
       await navigator.share({
         title: 'Datos del Cliente',

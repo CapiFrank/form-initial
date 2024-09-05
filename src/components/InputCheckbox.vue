@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-1">
         <span class="text-sm text-black font-semibold">{{ text }}<span class="text-red-500" v-show="props.required"> *</span></span>
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-x-4">
             <!-- Primera columna -->
             <div class="flex flex-col">
                 <div class="flex gap-2" v-for="option in firstColumnOptions" :key="option">
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
     modelValue: {
